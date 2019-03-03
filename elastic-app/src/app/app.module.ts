@@ -3,10 +3,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 
-import { MatTabsModule, MatToolbarModule , MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule, MatInputModule, MatProgressBarModule } from '@angular/material';
+import { MatTabsModule, MatToolbarModule , MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppRoutingModule } from './app-routing.module';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 
 import { AppComponent } from './app.component';
 import { TestEsComponent } from './test-es/test-es.component';
@@ -38,7 +40,7 @@ import { CategoryComponent } from './category/category.component';
     MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   providers: [{provide: APP_BASE_HREF, useValue: '/'}],
   bootstrap: [AppComponent]

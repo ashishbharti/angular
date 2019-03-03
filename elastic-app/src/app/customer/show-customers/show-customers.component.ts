@@ -11,7 +11,7 @@ export class ShowCustomersComponent implements OnInit {
 
   private static readonly INDEX = 'kibana_sample_data_flights';
   private static readonly TYPE = '_doc';
-  private static readonly SIZE = 3;
+  private static readonly SIZE = 10;
 
   customerSources: FlightSource[];
   haveNextPage = false;

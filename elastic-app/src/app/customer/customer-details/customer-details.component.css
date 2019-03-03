@@ -1,5 +1,9 @@
-label {
+h3 label {
     font-weight: 500;
+    color:#1a0dab;
+}
+
+label {
     color:gray;
 }
 

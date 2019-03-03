@@ -1,27 +1,36 @@
-<div *ngIf="customer">
-  <h2>
-    <label>FlightNum: {{customer.FlightNum}}</label> 
-  </h2>
-  <div>
-    <label>DestCountry: </label> {{customer.DestCountry}}
-  </div>
-  <div>
-    <label>OriginCityName: </label> {{customer.OriginCityName}}
-  </div>
-  <div>
-    <label>OriginWeather: </label> {{customer.OriginWeather}}
-  </div>
-  <div>
-    <label>DestCountry: </label> {{customer.DestCountry}}
-  </div>
-  <div>
-    <label>Dest: </label> {{customer.Dest}}
-  </div>
-  <div>
-    <label>Carrier: </label> {{customer.Carrier}}
-  </div>
-  <div>
-    <label>AvgTicketPrice: </label> {{customer.AvgTicketPrice | currency}}
-  </div>
-  <hr/>
-</div>
+<mat-accordion *ngIf="customer">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <h3>
+                    <label>FlightNum: {{customer.FlightNum}}</label>
+                </h3>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-selection-list #results>
+            <div>
+                <label>DestCountry: </label> {{customer.DestCountry}}
+            </div>
+            <div>
+                <label>OriginCityName: </label> {{customer.OriginCityName}}
+            </div>
+            <div>
+                <label>OriginWeather: </label> {{customer.OriginWeather}}
+            </div>
+            <div>
+                <label>DestCountry: </label> {{customer.DestCountry}}
+            </div>
+            <div>
+                <label>Dest: </label> {{customer.Dest}}
+            </div>
+            <div>
+                <label>Carrier: </label> {{customer.Carrier}}
+            </div>
+            <div>
+                <label>AvgTicketPrice: </label> {{customer.AvgTicketPrice | currency}}
+            </div>
+        </mat-selection-list>
+
+    </mat-expansion-panel>
+</mat-accordion>
+

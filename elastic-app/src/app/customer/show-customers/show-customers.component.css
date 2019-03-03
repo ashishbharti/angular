@@ -12,8 +12,7 @@
     width:100%;
 }
 app-sidenav { display: flex; }
-mat-drawer-container { flex: 1 1 auto; }
+.mat-drawer-container {
+    height: 100%;
+}    
 
-.side-menu{
-    min-width:250px;
-}

@@ -22,3 +22,10 @@ body {
 .mat-drawer-content{
     padding-left: 10px;
 }
+.mat-sidenav {
+  display: flex;
+  flex-direction: column;
+}
+.mat-sidenav-backdrop.mat-sidenav-shown{
+    background-color: transparent !important;
+}

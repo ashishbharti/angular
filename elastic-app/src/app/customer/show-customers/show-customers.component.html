@@ -8,7 +8,7 @@
     <mat-progress-bar *ngIf="progressbar" mode="indeterminate"></mat-progress-bar>
     <mat-drawer-container>
         
-        <mat-drawer class="side-menu" #snav [mode]="'push'" [ngStyle]="{'min-width': '20%'}" position="start">
+        <mat-drawer class="side-menu" #snav [mode]="'side'" [ngStyle]="{'min-width': '20%'}" position="start">
             <mat-form-field class="elastic-form">
                 <input matInput type="text" (keyup)="search($event)" placeholder="Search" class="input">
             </mat-form-field>
@@ -19,7 +19,7 @@
                             {{item.key}}
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <mat-selection-list #shoes>
+                    <mat-selection-list #results>
                         <mat-list-option *ngFor="let nav of item.value.buckets">
                             {{nav.key}} ({{nav.doc_count}} )
                         </mat-list-option>
