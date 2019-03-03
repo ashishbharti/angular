@@ -1,0 +1,47 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="snav.toggle()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <h1>Elastic Search App</h1>
+</mat-toolbar>
+
+    <mat-progress-bar *ngIf="progressbar" mode="indeterminate"></mat-progress-bar>
+    <mat-drawer-container>
+        
+        <mat-drawer class="side-menu" #snav [mode]="'push'" [ngStyle]="{'min-width': '20%'}" position="start">
+            <mat-form-field class="elastic-form">
+                <input matInput type="text" (keyup)="search($event)" placeholder="Search" class="input">
+            </mat-form-field>
+            <mat-accordion>
+                <mat-expansion-panel *ngFor="let item of aggrs | keyvalue">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{item.key}}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-selection-list #shoes>
+                        <mat-list-option *ngFor="let nav of item.value.buckets">
+                            {{nav.key}} ({{nav.doc_count}} )
+                        </mat-list-option>
+                    </mat-selection-list>
+                    <!--mat-list>
+                        <a mat-list-item routerLink="." *ngFor="let nav of item.value.buckets">{{nav.key}} (
+                            {{nav.doc_count}} )</a>
+                    </mat-list-->
+                </mat-expansion-panel>
+            </mat-accordion>
+
+        </mat-drawer>
+        
+        <mat-drawer-content>
+            <mat-toolbar color="secondary">
+                <span>Total {{total}} Results</span>
+            </mat-toolbar>
+            <div *ngFor="let customerSource of customerSources" style="margin-top:20px">
+                <app-customer-details [customer]='customerSource._source'></app-customer-details>
+            </div>
+
+            <h3>{{notice}}</h3>
+            <button (click)="showNextPage()" *ngIf="haveNextPage" class="btn btn-primary">Next</button>
+        </mat-drawer-content>
+    </mat-drawer-container>

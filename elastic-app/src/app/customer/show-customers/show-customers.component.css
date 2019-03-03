@@ -1,0 +1,19 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+.mat-drawer-content div{
+    padding-left: 10px;
+}
+.mat-drawer {
+    
+    outline: 1px solid #d9d9d9;
+    
+}
+.elastic-form{
+    width:100%;
+}
+app-sidenav { display: flex; }
+mat-drawer-container { flex: 1 1 auto; }
+
+.side-menu{
+    min-width:250px;
+}

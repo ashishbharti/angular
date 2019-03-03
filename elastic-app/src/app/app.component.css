@@ -1,0 +1,24 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+body { 
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.basic-container {
+  padding: 5px;
+}
+
+.version-info {
+  font-size: 8pt;
+  float: right;
+}
+
+.navBardemoBasicUsage md-content .ext-content {
+  padding: 150px;
+  margin: 20px;
+  background-color: #FFF2E0; }
+
+.mat-drawer-content{
+    padding-left: 10px;
+}
