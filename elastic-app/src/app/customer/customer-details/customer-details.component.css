@@ -1,4 +1,4 @@
-h3 label {
+h3 > label {
     font-weight: 500;
     color:#1a0dab;
 }
@@ -6,4 +6,10 @@ h3 label {
 label {
     color:gray;
 }
+mat-panel-title h3{
+color: rgba(102, 102, 102, 0.87);
+}
 
+mat-toolbar h1 {
+margin-left:5px !important;
+}
