@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FlightSource } from '../flight.interface';
 import { ElasticsearchService } from '../../elasticsearch.service';
+import { MustQuery, Terms } from '../query.interface';
 
 @Component({
   selector: 'app-show-customers',
@@ -27,7 +28,11 @@ export class ShowCustomersComponent implements OnInit {
   progressbar: Boolean = true;
   private queryText = '';
 
-  private lastKeypress = 0
+  private lastKeypress = 0;
+
+  selectedOptions: string[] = [];
+
+  obj: MustQuery;
 
   constructor(private es: ElasticsearchService) {
     this.scrollID = '';
@@ -95,4 +100,34 @@ export class ShowCustomersComponent implements OnInit {
 
     this.lastKeypress = $event.timeStamp;
   }
+  onSelectedOptionsChange(_cat, _event) {
+      const tempArr: string[] = [];
+      for (const Ent of _event) {
+         tempArr.push(Ent.value);
+       }
+      const terms1: Terms = {
+          'terms' : {
+            [_cat.key] : tempArr,
+          }
+        };
+       this.obj =  { 'query': {
+      'bool': {
+      'must': [ terms1 ]
+        }
+      }
+  };
+  this.es.filterSearch(ShowCustomersComponent.INDEX,
+        ShowCustomersComponent.TYPE,
+        this.Fields, this.obj.query).then(
+          response => {
+            this.customerSources = response.hits.hits;
+            this.aggrs = response.aggregations;
+            this.total = response.hits.total;
+            console.log(response);
+          }, error => {
+            console.error(error);
+          }).then(() => {
+            console.log('Filter Completed!');
+          });
+ }
 }

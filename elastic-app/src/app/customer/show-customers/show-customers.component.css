@@ -16,6 +16,9 @@ app-sidenav { display: flex; }
     height: 100%;
 }    
 
-mat-toolbar h1 {
+.mat-toolbar h1 {
 margin-left:10px !important;
+}
+.mat-toolbar {
+    border-bottom: 1px solid #ccc;
 }

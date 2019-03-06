@@ -101,5 +101,18 @@ export class ElasticsearchService {
             filterPath: ['hits.hits._source', 'hits.total', '_scroll_id']
         });
     }
+    filterSearch(_index, _type, _field, _queryString): any {
+        this.aggrBuilder();
+        return this.client.search({
+            index: _index,
+            type: _type,
+            filterPath: ['hits.hits._source', 'hits.total', '_scroll_id', 'aggregations'],
+            body: {
+                'query':  _queryString,
+                'aggs': this.aggrs
+            },
+
+        });
+    }
 }
 

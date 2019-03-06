@@ -13,25 +13,29 @@
                 <input matInput type="text" (keyup)="search($event)" placeholder="Search" class="input">
             </mat-form-field>
             <h3 style="text-align: center">Refinements</h3>
-            <mat-accordion>
-                <mat-expansion-panel *ngFor="let item of aggrs | keyvalue">
+            <form #myForm="ngForm">
+            <mat-accordion #accordion="matAccordion" [multi]="true">
+                <mat-expansion-panel #itemRef *ngFor="let item of aggrs | keyvalue">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
                             {{item.key | uppercase}}
                         </mat-panel-title>
+                        <!--mat-icon>circle</mat-icon-->
                     </mat-expansion-panel-header>
-                    <mat-selection-list #results>
-                        <mat-list-option *ngFor="let nav of item.value.buckets">
+                    <ng-template matExpansionPanelContent>
+                    <mat-selection-list #list (selectionChange)="onSelectedOptionsChange(item , list.selectedOptions.selected)">
+                        <mat-list-option  *ngFor="let nav of item.value.buckets" [value]="nav.key">
                             {{nav.key}} ({{nav.doc_count}} )
                         </mat-list-option>
                     </mat-selection-list>
+                    </ng-template>
                     <!--mat-list>
                         <a mat-list-item routerLink="." *ngFor="let nav of item.value.buckets">{{nav.key}} (
                             {{nav.doc_count}} )</a>
                     </mat-list-->
                 </mat-expansion-panel>
             </mat-accordion>
-
+            </form>
         </mat-drawer>
         
         <mat-drawer-content>
