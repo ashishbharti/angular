@@ -22,3 +22,14 @@ margin-left:10px !important;
 .mat-toolbar {
     border-bottom: 1px solid #ccc;
 }
+.mat-icon {
+    vertical-align: middle;
+}
+.breadcrumb-button {
+    color: #001480;
+    background: powderblue;
+    border-radius: 5px;
+    line-height: 30px;
+        margin-top: 2px;
+    margin-left: 10px;
+}

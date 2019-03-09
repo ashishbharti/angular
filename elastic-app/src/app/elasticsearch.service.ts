@@ -10,7 +10,7 @@ export class ElasticsearchService {
 
     private client: elasticsearch.Client;
 
-    attributes = ['OriginWeather', 'OriginCityName', 'DestCountry',  'Carrier', 'DestCityName', 'FlightDelay', 'FlightDelayType'];
+    attributes = ['OriginWeather', 'OriginCityName', 'DestCountry', 'Carrier', 'DestCityName', 'FlightDelay', 'FlightDelayType'];
     aggrs = {};
 
 
@@ -53,7 +53,7 @@ export class ElasticsearchService {
         });
     }
     aggrBuilder(): any {
-        this.attributes.map((e) => { this.aggrs[e] = { 'terms': { 'field': e, 'order': { '_count': 'desc' } } } });
+        this.attributes.map((e) => { this.aggrs[e] = { 'terms': { 'field': e, 'order': { '_count': 'desc' } } }; });
     }
     getAllDocumentsWithScroll(_index, _type, _size): any {
         this.aggrBuilder();
@@ -80,8 +80,10 @@ export class ElasticsearchService {
         return this.client.search({
             index: _index,
             type: _type,
+            scroll: '1m',
             filterPath: ['hits.hits._source', 'hits.total', '_scroll_id', 'aggregations'],
             body: {
+                'size': 10,
                 'query': {
                     'simple_query_string': {
                         'fields': _field,
@@ -101,14 +103,23 @@ export class ElasticsearchService {
             filterPath: ['hits.hits._source', 'hits.total', '_scroll_id']
         });
     }
+    getPreviousPage(scroll_id): any {
+        return this.client.scroll({
+            scrollId: scroll_id,
+            scroll: '1m',
+            filterPath: ['hits.hits._source', 'hits.total', '_scroll_id']
+        });
+    }
     filterSearch(_index, _type, _field, _queryString): any {
         this.aggrBuilder();
         return this.client.search({
             index: _index,
             type: _type,
+            scroll: '1m',
             filterPath: ['hits.hits._source', 'hits.total', '_scroll_id', 'aggregations'],
             body: {
-                'query':  _queryString,
+                'size': 10,
+                'query': _queryString,
                 'aggs': this.aggrs
             },
 
