@@ -27,9 +27,18 @@ margin-left:10px !important;
 }
 .breadcrumb-button {
     color: #001480;
-    background: powderblue;
     border-radius: 5px;
-    line-height: 30px;
-        margin-top: 2px;
+    line-height: 10px;
+    margin-top: 2px;
     margin-left: 10px;
+}
+.mat-toolbar-single-row {
+    height: 46px;
+}
+.mat-paginator{
+    background: #fafafa;
+}
+.mat-toolbar {
+    background: #3f51b5;
+    border-bottom: 2px solid coral;
 }

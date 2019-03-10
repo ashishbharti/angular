@@ -55,15 +55,15 @@ export class ElasticsearchService {
     aggrBuilder(): any {
         this.attributes.map((e) => { this.aggrs[e] = { 'terms': { 'field': e, 'order': { '_count': 'desc' } } }; });
     }
-    getAllDocumentsWithScroll(_index, _type, _size): any {
+    getAllDocumentsWithScroll(_index, _type, _currIndex, _pageSize): any {
         this.aggrBuilder();
         return this.client.search({
             index: _index,
             type: _type,
-            scroll: '1m',
-            filterPath: ['hits.hits._source', 'hits.total', '_scroll_id', 'aggregations'],
+            filterPath: ['hits.hits._source', 'hits.total', 'aggregations'],
             body: {
-                'size': _size,
+                'from': _currIndex,
+                'size': _pageSize,
                 'query': {
                     'match_all': {}
                 },
@@ -75,15 +75,15 @@ export class ElasticsearchService {
         });
     }
 
-    fullTextSearch(_index, _type, _field, _queryText): any {
+    fullTextSearch(_index, _type, _field, _queryText, _currIndex, _pageSize): any {
         this.aggrBuilder();
         return this.client.search({
             index: _index,
             type: _type,
-            scroll: '1m',
-            filterPath: ['hits.hits._source', 'hits.total', '_scroll_id', 'aggregations'],
+            filterPath: ['hits.hits._source', 'hits.total', 'aggregations'],
             body: {
-                'size': 10,
+                'from': _currIndex,
+                'size': _pageSize,
                 'query': {
                     'simple_query_string': {
                         'fields': _field,
@@ -119,6 +119,22 @@ export class ElasticsearchService {
             filterPath: ['hits.hits._source', 'hits.total', '_scroll_id', 'aggregations'],
             body: {
                 'size': 10,
+                'query': _queryString,
+                'aggs': this.aggrs
+            },
+
+        });
+    }
+
+    filterPaginationSearch(_index, _type, _queryString, _currIndex, _pageSize): any {
+        this.aggrBuilder();
+        return this.client.search({
+            index: _index,
+            type: _type,
+            filterPath: ['hits.hits._source', 'hits.total', 'aggregations'],
+            body: {
+                'from': _currIndex,
+                'size': _pageSize,
                 'query': _queryString,
                 'aggs': this.aggrs
             },

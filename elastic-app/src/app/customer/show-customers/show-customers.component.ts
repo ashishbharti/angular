@@ -15,11 +15,11 @@ export class ShowCustomersComponent implements OnInit {
     private static readonly TYPE = '_doc';
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
-    pageSize = 4;
+    pageSize = 10;
     pageIndex = 0;
+    previousPageIndex = 0;
 
     pageSizeOptions: number[] = [5, 10, 25, 100];
-    SIZE = 10;
     customerSources: FlightSource[];
     haveNextPage = false;
     scrollID = '';
@@ -32,7 +32,7 @@ export class ShowCustomersComponent implements OnInit {
     total: number;
 
     progressbar: Boolean = true;
-    private queryText = '';
+    queryText = '';
 
     private lastKeypress = 0;
 
@@ -51,20 +51,17 @@ export class ShowCustomersComponent implements OnInit {
 
 
     ngOnInit() {
+        this.queryText = '';
         this.tr = [];
         this.es.getAllDocumentsWithScroll(
             ShowCustomersComponent.INDEX,
             ShowCustomersComponent.TYPE,
-            this.SIZE).then(
+            this.pageIndex, this.pageSize).then(
                 response => {
                     this.progressbar = false;
                     this.customerSources = response.hits.hits;
                     this.aggrs = response.aggregations;
                     this.total = response.hits.total;
-                    if (response.hits.hits.length < response.hits.total) {
-                        this.haveNextPage = true;
-                        this.scrollID = response._scroll_id;
-                    }
                     console.log(response);
                 }, error => {
                     console.error(error);
@@ -77,8 +74,60 @@ export class ShowCustomersComponent implements OnInit {
     pageEvent(event) {
         this.pageSize = event.pageSize;
         this.pageIndex = event.pageIndex;
-         console.log(this.pageSize + ' : ' + this.pageIndex);
+        console.log(' queryText :' + this.queryText);
+        if (typeof this.queryText !== 'undefined' && this.queryText) {
+            this.es.fullTextSearch(
+                ShowCustomersComponent.INDEX,
+                ShowCustomersComponent.TYPE,
+                this.Fields, this.queryText, this.pageIndex, this.pageSize).then(
+                    response => {
+                        this.customerSources = response.hits.hits;
+                        this.aggrs = response.aggregations;
+                        this.total = response.hits.total;
+                        console.log(response);
+                    }, error => {
+                        console.error(error);
+                    }).then(() => {
+                        console.log('Search Completed!');
+                    });
+        } else {
+            if (typeof this.obj === 'undefined') {
+                this.es.getAllDocumentsWithScroll(
+                    ShowCustomersComponent.INDEX,
+                    ShowCustomersComponent.TYPE,
+                    this.pageIndex, this.pageSize).then(
+                        response => {
+                            this.progressbar = false;
+                            this.customerSources = response.hits.hits;
+                            this.aggrs = response.aggregations;
+                            this.total = response.hits.total;
+                            console.log(response);
+                        }, error => {
+                            console.error(error);
+                        }).then(() => {
+                            console.log('Show Customer Completed!');
+                        });
+            } else {
+                this.es.filterPaginationSearch(ShowCustomersComponent.INDEX,
+                    ShowCustomersComponent.TYPE,
+                    this.obj.query, this.pageIndex, this.pageSize).then(
+                        response => {
+                            this.total = response.hits.total;
+                            this.customerSources = response.hits.hits;
+                            this.aggrs = response.aggregations;
+                            if (response.hits.hits.length < response.hits.total) {
+                                this.haveNextPage = true;
+                                this.scrollID = response._scroll_id;
+                            }
+                            console.log(response);
+                        }, error => {
+                            console.error(error);
+                        }).then(() => {
+                            console.log('Filter Completed! ' + JSON.stringify(this.tr));
+                        });
+            }
         }
+    }
 
 
     showNextPage() {
@@ -98,13 +147,14 @@ export class ShowCustomersComponent implements OnInit {
     }
     search($event) {
         this.tr = [];
+        this.paginator.pageIndex = 0;
         if ($event.timeStamp - this.lastKeypress > 100) {
             this.queryText = $event.target.value;
 
             this.es.fullTextSearch(
                 ShowCustomersComponent.INDEX,
                 ShowCustomersComponent.TYPE,
-                this.Fields, this.queryText).then(
+                this.Fields, this.queryText, this.pageIndex, this.pageSize).then(
                     response => {
                         this.customerSources = response.hits.hits;
                         this.aggrs = response.aggregations;
@@ -140,6 +190,7 @@ export class ShowCustomersComponent implements OnInit {
                 }
             }
         };
+        this.paginator.pageIndex = 0;
         this.es.filterSearch(ShowCustomersComponent.INDEX,
             ShowCustomersComponent.TYPE,
             this.Fields, this.obj.query).then(
