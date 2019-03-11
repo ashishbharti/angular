@@ -42,6 +42,48 @@ export class ShowCustomersComponent implements OnInit {
 
     tr: any = [];
 
+    pieChartLabels: string[] = [];
+    pieChartData: number[] = [];
+    pieChartType = 'doughnut';
+
+    barChartLabels: string[] = [];
+    barChartData: number[] = [];
+    barChartType = 'bar';
+    chartOptions = {
+
+        aspectRatio: 2,
+        title: {
+            text: 'Origin Weather Donut',
+            display: true
+        },
+        legend: {
+          display: true
+        }
+    };
+
+    barchartOptions = {
+
+        aspectRatio: 2,
+        ticks: {
+            stepSize: 1,
+            min: 0,
+            autoSkip: false
+        },
+        title: {
+            text: 'Origin Weather Bar',
+            display: true
+        },
+        legend: {
+          display: false
+        }
+
+    };
+
+    // tslint:disable-next-line:max-line-length
+    pieChartColors: Array<any> = [{backgroundColor: ['#0074D9', '#FF4136', '#2ECC40', '#FF851B', '#7FDBFF', '#B10DC9', '#FFDC00', '#001f3f', '#39CCCC', '#01FF70', '#85144b', '#F012BE', '#3D9970', '#111111', '#AAAAAA']
+    }];
+
+
     constructor(public es: ElasticsearchService) {
         this.scrollID = '';
         this.notice = '';
@@ -53,6 +95,7 @@ export class ShowCustomersComponent implements OnInit {
     ngOnInit() {
         this.queryText = '';
         this.tr = [];
+        this.paginator.pageIndex = 0;
         this.es.getAllDocumentsWithScroll(
             ShowCustomersComponent.INDEX,
             ShowCustomersComponent.TYPE,
@@ -62,6 +105,11 @@ export class ShowCustomersComponent implements OnInit {
                     this.customerSources = response.hits.hits;
                     this.aggrs = response.aggregations;
                     this.total = response.hits.total;
+                    const buck: any = this.aggrs.OriginWeather.buckets;
+                    this.pieChartLabels = buck.map((s) => s.key + '');
+                    this.pieChartData = buck.map((s) => s.doc_count);
+                    this.barChartData = this.pieChartData;
+                    this.barChartLabels = this.pieChartLabels;
                     console.log(response);
                 }, error => {
                     console.error(error);
@@ -198,6 +246,11 @@ export class ShowCustomersComponent implements OnInit {
                     this.total = response.hits.total;
                     this.customerSources = response.hits.hits;
                     this.aggrs = response.aggregations;
+                    const buck: any = this.aggrs.OriginWeather.buckets;
+                    this.pieChartLabels = buck.map((s) => s.key + '');
+                    this.pieChartData = buck.map((s) => s.doc_count);
+                    this.barChartData = this.pieChartData;
+                    this.barChartLabels = this.pieChartLabels;
                     if (response.hits.hits.length < response.hits.total) {
                         this.haveNextPage = true;
                         this.scrollID = response._scroll_id;

@@ -3,7 +3,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
+import { ChartsModule } from 'ng2-charts';
 import { MatTabsModule, MatToolbarModule , MatIconModule, MatSidenavModule, MatListModule, MatExpansionModule,
          MatButtonModule, MatPaginatorModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -45,7 +45,8 @@ import { CategoryComponent } from './category/category.component';
     MatProgressBarModule,
     MatButtonModule,
     MatPaginatorModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ChartsModule
   ],
   providers: [{provide: APP_BASE_HREF, useValue: '/'}],
   bootstrap: [AppComponent]

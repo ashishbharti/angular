@@ -47,33 +47,51 @@
         <mat-toolbar color="primary">
             <span>&nbsp;&nbsp;{{total}} Results</span>
         </mat-toolbar>
-        <div class="container"
-     fxLayout
-     fxLayout.xs="row"
-     fxLayoutGap="5px"
-    fxLayoutAlign="end"
-     fxLayoutGap.xs="0">
-     
-        <div class="item item-2" fxFlex="42%" fxFlexOrder="2" >
-        <mat-paginator #paginator [length]="total" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 200]" (page)="pageEvent($event)" showFirstLastButtons="true" color="primary">
-        </mat-paginator>
-        </div>
-        <div class="item item-1">
-        <span color="primary" *ngFor="let brc of tr;last as isLast;">
-            <button mat-button class="breadcrumb-button" *ngFor="let kbs of brc.terms | keyvalue">
-                <mat-label>{{kbs.key}} : </mat-label>
-                <mat-label>{{kbs.value}}</mat-label>
-            </button>
-            <mat-icon ng-if="!isLast" color="accent">keyboard_arrow_right</mat-icon>
-        </span>
-        </div>
-       </div> 
-        <div *ngFor="let customerSource of customerSources" style="margin-top:20px">
-            <app-customer-details [customer]='customerSource._source'></app-customer-details>
-        </div>
+        <mat-tab-group>
+            <mat-tab label="Detail Table">
+                <div class="container" fxLayout fxLayout.xs="row" fxLayoutGap="5px" fxLayoutAlign="end" fxLayoutGap.xs="0">
 
-        <!--button (click)="showNextPage()" *ngIf="haveNextPage" class="btn btn-primary">Next</button-->
-        <mat-paginator #paginator [length]="total" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 200]" (page)="pageEvent($event)" showFirstLastButtons="true">
-        </mat-paginator>
+                    <div class="item item-2" fxFlex="42%" fxFlexOrder="2">
+                        <mat-paginator #paginator [length]="total" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 200]"
+                            (page)="pageEvent($event)" showFirstLastButtons="true" color="primary">
+                        </mat-paginator>
+                    </div>
+                    <div class="item item-1">
+                        <span color="primary" *ngFor="let brc of tr;last as isLast;">
+                            <button mat-button class="breadcrumb-button" *ngFor="let kbs of brc.terms | keyvalue">
+                                <mat-label>{{kbs.key}} : </mat-label>
+                                <mat-label>{{kbs.value}}</mat-label>
+                            </button>
+                            <mat-icon ng-if="!isLast" color="accent">keyboard_arrow_right</mat-icon>
+                        </span>
+                    </div>
+                </div>
+                <div *ngFor="let customerSource of customerSources" style="margin-top:20px">
+                    <app-customer-details [customer]='customerSource._source'></app-customer-details>
+                </div>
+
+                <!--button (click)="showNextPage()" *ngIf="haveNextPage" class="btn btn-primary">Next</button-->
+                <mat-paginator #paginator [length]="total" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 200]"
+                    (page)="pageEvent($event)" showFirstLastButtons="true">
+                </mat-paginator>
+            </mat-tab>
+            <mat-tab label="Charts">
+                <div class="container" fxLayout fxLayout.xs="row" fxLayoutGap="5px" fxLayoutAlign="start"
+                    fxLayoutGap.xs="0">
+                    <div class="chartitem1" fxFlex="49%" fxFlexOrder="1">
+                        <div style="display: block">
+                            <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+                                [colors]="pieChartColors" [options]="chartOptions"></canvas>
+                        </div>
+                    </div>
+                    <div class="chartitem2" fxFlex="49%" fxFlexOrder="2">
+                        <div style="display: block">
+                            <canvas baseChart [options]="barchartOptions" [data]="barChartData" [labels]="barChartLabels" [colors]="pieChartColors" [chartType]="barChartType"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-tab>
+        </mat-tab-group>
     </mat-drawer-content>
 </mat-drawer-container>
